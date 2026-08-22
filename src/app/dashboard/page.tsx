@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import AddStudentForm from "@/components/AddStudentForm";
+import StudentList from "@/components/StudentList";
 import { StudentAverageChart, CompletionDistributionChart } from "@/components/OverallProgressCharts";
 
 export default async function DashboardPage() {
@@ -94,28 +94,15 @@ export default async function DashboardPage() {
         {students.length === 0 ? (
           <p className="text-sm text-ink-secondary">No students yet. Add one above to get started.</p>
         ) : (
-          <ul className="flex flex-col divide-y divide-border rounded border border-border bg-surface">
-            {students.map((s) => {
-              const avg = perStudentAverages.find((p) => p.name === s.name)?.average;
-              return (
-                <li key={s.id}>
-                  <Link
-                    href={`/students/${s.id}`}
-                    className="flex items-center justify-between px-4 py-3 hover:bg-plane"
-                  >
-                    <div>
-                      <div className="text-sm font-medium text-ink-primary">{s.name}</div>
-                      <div className="text-xs text-ink-muted">Grade {s.grade}</div>
-                    </div>
-                    <div className="text-sm text-ink-secondary">
-                      {s.goals.length} goal{s.goals.length === 1 ? "" : "s"}
-                      {avg !== null && avg !== undefined ? ` · ${avg}% avg` : ""}
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <StudentList
+            students={students.map((s) => ({
+              id: s.id,
+              name: s.name,
+              grade: s.grade,
+              goalCount: s.goals.length,
+              average: perStudentAverages.find((p) => p.name === s.name)?.average ?? null,
+            }))}
+          />
         )}
       </section>
     </div>
