@@ -76,6 +76,28 @@ export async function deleteStudent(studentId: string) {
   redirect("/dashboard");
 }
 
+export async function updateStudentGrade(
+  studentId: string,
+  _prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const teacherId = await requireTeacherId();
+
+  const student = await prisma.student.findFirst({
+    where: { id: studentId, teacherId },
+  });
+  if (!student) return { error: "Student not found." };
+
+  const grade = String(formData.get("grade") ?? "").trim();
+  if (!grade) return { error: "Grade is required." };
+
+  await prisma.student.update({ where: { id: studentId }, data: { grade } });
+
+  revalidatePath(`/students/${studentId}`);
+  revalidatePath("/dashboard");
+  return { error: null };
+}
+
 export async function createGoal(
   studentId: string,
   _prevState: ActionState,

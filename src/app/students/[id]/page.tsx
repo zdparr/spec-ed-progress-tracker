@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import AddGoalForm from "@/components/AddGoalForm";
 import ConfirmDeleteButton from "@/components/ConfirmDeleteButton";
+import EditGradeForm from "@/components/EditGradeForm";
 import StudentPdfReport from "@/components/StudentPdfReport";
 import { deleteStudent, toggleGoalArchived } from "@/lib/actions";
 
@@ -57,7 +58,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
         <div className="mt-1 flex items-start justify-between">
           <div>
             <h1 className="text-xl font-semibold text-ink-primary">{student.name}</h1>
-            <p className="text-sm text-ink-secondary">Grade {student.grade}</p>
+            <EditGradeForm studentId={student.id} grade={student.grade} />
           </div>
           <div className="flex items-center gap-2">
             <StudentPdfReport
