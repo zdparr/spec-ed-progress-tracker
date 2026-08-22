@@ -7,7 +7,7 @@ export default function NavBar() {
   const { data: session, status } = useSession();
 
   return (
-    <header className="border-b border-border bg-surface">
+    <header className="border-b border-border bg-surface print:hidden">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
         <Link href="/dashboard" className="text-sm font-semibold text-ink-primary">
           Spec Ed Progress Tracker

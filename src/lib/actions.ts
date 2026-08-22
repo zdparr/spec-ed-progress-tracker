@@ -9,6 +9,11 @@ import { prisma } from "@/lib/prisma";
 
 export type ActionState = { error: string | null };
 
+function parseDateInputAsLocalMidnight(dateStr: string): Date {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 async function requireTeacherId(): Promise<string> {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -144,7 +149,7 @@ export async function addProgressEntry(
       goalId,
       percent,
       note: note || null,
-      recordedAt: recordedAtRaw ? new Date(recordedAtRaw) : new Date(),
+      recordedAt: recordedAtRaw ? parseDateInputAsLocalMidnight(recordedAtRaw) : new Date(),
     },
   });
 
