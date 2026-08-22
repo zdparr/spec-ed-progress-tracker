@@ -30,16 +30,21 @@ export default async function StudentPage({ params }: { params: { id: string } }
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-ink-primary">{student.name}</h1>
-          <p className="text-sm text-ink-secondary">Grade {student.grade}</p>
+      <div>
+        <Link href="/dashboard" className="text-xs text-brand hover:underline">
+          ← Dashboard
+        </Link>
+        <div className="mt-1 flex items-start justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-ink-primary">{student.name}</h1>
+            <p className="text-sm text-ink-secondary">Grade {student.grade}</p>
+          </div>
+          <ConfirmDeleteButton
+            action={deleteStudent.bind(null, student.id)}
+            confirmMessage={`Delete ${student.name} and all of their goals? This cannot be undone.`}
+            label="Delete student"
+          />
         </div>
-        <ConfirmDeleteButton
-          action={deleteStudent.bind(null, student.id)}
-          confirmMessage={`Delete ${student.name} and all of their goals? This cannot be undone.`}
-          label="Delete student"
-        />
       </div>
 
       <section className="flex flex-col gap-4">
