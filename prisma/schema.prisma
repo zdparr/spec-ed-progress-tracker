@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  students     Student[]
+}
+
+model Student {
+  id        String   @id @default(cuid())
+  name      String
+  grade     String
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  goals     Goal[]
+  createdAt DateTime @default(now())
+
+  @@index([teacherId])
+}
+
+model Goal {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  archived    Boolean         @default(false)
+  studentId   String
+  student     Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  entries     ProgressEntry[]
+  createdAt   DateTime        @default(now())
+
+  @@index([studentId])
+}
+
+model ProgressEntry {
+  id         String   @id @default(cuid())
+  percent    Int
+  note       String?
+  recordedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  goalId     String
+  goal       Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId])
+}
