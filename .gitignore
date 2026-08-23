@@ -18,6 +18,9 @@
 *.pem
 npm-debug.log*
 
+# local-only admin tooling — never deployed, deliberately untracked
+/src/app/admin/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
